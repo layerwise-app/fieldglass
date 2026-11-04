@@ -29,14 +29,15 @@ export function ToolIcon({
 }
 
 const icons: Record<Tool['icon'], React.ReactNode> = {
-  // A bezier curve with its anchor and handles.
+  // A bezier curve with its anchor and both handles. The curve and handles
+  // stop at the anchor's edges so nothing shows through it.
   pen: (
     <g>
-      <path d='M4 18.5C7 9.5 14 6 20 6.5' />
-      <path d='M4 18.5 9.5 12' strokeDasharray='1.6 2' />
-      <rect x='2.6' y='17.1' width='2.8' height='2.8' fill='currentColor' />
-      <circle cx='10' cy='11.4' r='1.4' />
-      <rect x='18.6' y='5.1' width='2.8' height='2.8' fill='currentColor' />
+      <path d='M3.5 20C4.4 12.6 6.9 8 10.2 8M13.8 8C17.1 8 19.6 12.6 20.5 20' />
+      <path d='M5.4 8h4.8M13.8 8h4.8' />
+      <circle cx='3.8' cy='8' r='1.6' />
+      <circle cx='20.2' cy='8' r='1.6' />
+      <rect x='10.2' y='6.2' width='3.6' height='3.6' rx='0.4' />
     </g>
   ),
   // Three operators wired together.
