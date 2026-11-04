@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { useLayoutEffect, useRef, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, type ReactNode, type RefObject } from 'react';
 import { BlockView, figureCount } from '~/components/blocks';
 import { GlassFrame } from '~/components/blocks/Figure';
 import { useScrollScene } from '~/components/case-study/useScrollScene';
@@ -14,7 +14,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 export function CaseStudy({ project }: { project: Project }) {
   const ref = useRef<HTMLElement>(null);
-  useScrollScene(project.shape);
+  const stage = useRef<HTMLDivElement>(null);
+  useScrollScene(project.shape, stage);
 
   // After a morph the page fades in over the formed shape. The flag is set
   // by ProjectLink, which also dims <main> until navigation finishes.
@@ -41,7 +42,12 @@ export function CaseStudy({ project }: { project: Project }) {
 
   return (
     <article ref={ref} className='relative'>
-      <Hero project={project} index={index} total={projects.length} />
+      <Hero
+        project={project}
+        index={index}
+        total={projects.length}
+        stage={stage}
+      />
 
       <div className='mx-auto max-w-[1440px] px-4 md:px-6 lg:px-10'>
         <figure>
@@ -68,18 +74,20 @@ export function CaseStudy({ project }: { project: Project }) {
 function Hero({
   project,
   index,
-  total
+  total,
+  stage
 }: {
   project: Project;
   index: number;
   total: number;
+  stage: RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <header className='mx-auto flex min-h-[92svh] max-w-[1440px] flex-col px-4 pt-28 pb-8 md:px-6 md:pt-32 lg:min-h-[88svh] lg:px-10 lg:pb-12'>
+    <header className='mx-auto flex max-w-[1440px] flex-col px-4 pt-24 pb-8 md:px-6 md:pt-28 lg:min-h-[88svh] lg:px-10 lg:pb-12'>
       <div className='flex items-center justify-between gap-4'>
         <Link
           to='/work'
-          className='label inline-flex items-center gap-2 text-muted transition-colors hover:text-ink'
+          className='label -my-[13px] -ml-2 inline-flex h-11 items-center gap-2 rounded-md px-2 text-muted transition-colors hover:text-ink'
         >
           <svg width='12' height='12' viewBox='0 0 12 12' fill='none' aria-hidden>
             <path d='M11 6H1.5M5.5 2 1.5 6l4 4' stroke='currentColor' strokeWidth='1.2' />
@@ -93,42 +101,50 @@ function Hero({
         )}
       </div>
 
-      <div className='mt-auto grid grid-cols-12 gap-x-4 pt-[34svh] md:gap-x-6 lg:pt-16'>
-        <div className='col-span-12 lg:col-span-8'>
+      <div className='grid flex-1 grid-cols-12 gap-x-4 md:gap-x-6'>
+        {/* The project's shape forms inside this empty box: the field is
+            fitted to it, so the form stays clear of the text beside it. */}
+        <div className='col-span-12 flex flex-col pt-4 lg:order-2 lg:col-span-5 lg:pt-8'>
+          <div
+            ref={stage}
+            aria-hidden
+            className='h-[clamp(240px,40svh,440px)] lg:h-auto lg:min-h-[340px] lg:flex-1'
+          />
+          <p className='label mt-3 flex items-center justify-end gap-2 text-muted lg:mt-4'>
+            <ShapeGlyph shape={project.shape} size={16} className='text-ink' />
+            <span>
+              Field: <span className='text-ink'>{project.shape}</span>
+            </span>
+          </p>
+        </div>
+
+        <div className='col-span-12 flex flex-col justify-end pt-8 lg:order-1 lg:col-span-7 lg:pt-16'>
           <p className='label flex items-center gap-2 text-ink'>
             <span aria-hidden className='inline-block size-1.5 rounded-full bg-accent' />
             {project.discipline}
           </p>
-          <h1 className='display mt-5 text-[clamp(52px,9vw,140px)] text-balance'>
+          <h1 className='display mt-5 text-[clamp(52px,9vw,140px)] text-balance lg:text-[clamp(64px,8.2vw,124px)]'>
             {project.title}
           </h1>
           <p className='heading mt-6 max-w-[28ch] text-[22px] text-muted md:text-[28px] lg:text-[32px]'>
             {project.tagline}
           </p>
-        </div>
-      </div>
 
-      <div className='mt-12 grid grid-cols-12 items-end gap-x-4 gap-y-6 md:mt-16 md:gap-x-6'>
-        <dl className='glass-quiet col-span-12 grid grid-cols-2 gap-x-6 gap-y-6 rounded-[22px] p-5 md:grid-cols-[1.2fr_0.5fr_1.2fr_1.6fr] md:p-6 lg:col-span-9'>
-          <Meta term='Client'>{project.client}</Meta>
-          <Meta term='Year'>{project.year}</Meta>
-          <Meta term='Role' wide>
-            {project.role}
-          </Meta>
-          <Meta term='Team' wide>
-            <ul>
-              {project.team.map((member) => (
-                <li key={member}>{member}</li>
-              ))}
-            </ul>
-          </Meta>
-        </dl>
-        <p className='label col-span-12 flex items-center gap-2 text-muted lg:col-span-3 lg:justify-end lg:pb-6'>
-          <ShapeGlyph shape={project.shape} size={16} className='text-ink' />
-          <span>
-            Field: <span className='text-ink'>{project.shape}</span>
-          </span>
-        </p>
+          <dl className='glass-quiet mt-12 grid grid-cols-2 gap-x-6 gap-y-6 rounded-[22px] p-5 md:mt-16 md:grid-cols-[1.2fr_0.5fr_1.2fr_1.6fr] md:p-6'>
+            <Meta term='Client'>{project.client}</Meta>
+            <Meta term='Year'>{project.year}</Meta>
+            <Meta term='Role' wide>
+              {project.role}
+            </Meta>
+            <Meta term='Team' wide>
+              <ul>
+                {project.team.map((member) => (
+                  <li key={member}>{member}</li>
+                ))}
+              </ul>
+            </Meta>
+          </dl>
+        </div>
       </div>
     </header>
   );

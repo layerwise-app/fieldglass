@@ -20,7 +20,7 @@ import { archive } from '~/content/archive';
 import { formatNoteDate, writing } from '~/content/about';
 import type { Project } from '~/content/types';
 import { projects } from '~/content/work';
-import { field } from '~/lib/field/store';
+import { field, FORM_REACH, formRadius } from '~/lib/field/store';
 import { useFinePointer } from '~/lib/hooks';
 import { site } from '~/lib/site';
 import { cn } from '~/lib/utils';
@@ -40,19 +40,30 @@ export const Route = createFileRoute('/')({
 
 /** How much of the dashboard's top edge shows under the hero, in px. */
 const PEEK = 92;
+/** The height of the label rows at the hero's top and bottom, in px. */
+const HERO_LABELS = 64;
 
 function Home() {
   const heroRef = useRef<HTMLElement>(null);
 
+  // The form sits in the middle of the hero, between its two rows of labels.
   // The dashboard rising over the hero pulls the field back and blurs it.
   useEffect(() => {
-    field.setScene({ shape: 'iris', x: 0, y: 0 });
+    field.setScene({ shape: 'iris', x: 0, veil: 0 });
     let frame = 0;
     const update = () => {
       frame = 0;
       const height = heroRef.current?.offsetHeight ?? window.innerHeight;
+      const box = document.querySelector<HTMLElement>('[data-field]');
+      const fieldWidth = box?.clientWidth || window.innerWidth;
+      const fieldHeight = box?.clientHeight || window.innerHeight;
+      const room = (height - 2 * HERO_LABELS) / 2 / FORM_REACH;
       const progress = Math.min(1, Math.max(0, window.scrollY / height));
-      field.setScene({ depth: progress });
+      field.setScene({
+        depth: progress,
+        y: 0.5 - height / 2 / fieldHeight,
+        scale: Math.min(1, room / formRadius(fieldWidth, fieldHeight))
+      });
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -99,7 +110,7 @@ function Hero({ ref }: { ref: Ref<HTMLElement> }) {
               <li key={item.to}>
                 <Link
                   to={item.to}
-                  className='label block rounded-md px-1.5 py-1 leading-[18px] hover:text-muted sm:px-2'
+                  className='label -my-[13px] flex h-11 items-center rounded-md px-1.5 leading-[18px] hover:text-muted sm:px-2'
                 >
                   {item.label}
                 </Link>
@@ -268,7 +279,7 @@ function SelectedWork() {
         </p>
         <Link
           to='/work'
-          className='label -mr-1.5 flex items-center gap-1.5 rounded-md px-1.5 py-1 hover:text-muted'
+          className='label -my-[14px] -mr-1.5 flex h-11 items-center gap-1.5 rounded-md px-1.5 hover:text-muted'
         >
           All work
           <Arrow size={13} />

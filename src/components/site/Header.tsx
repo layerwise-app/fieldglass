@@ -13,16 +13,18 @@ export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
     <header className='sticky top-0 z-30 px-3 pt-3 sm:px-4 sm:pt-4'>
-      <div className='glass mx-auto flex h-14 max-w-[1520px] items-center justify-between gap-4 rounded-[20px] pr-2 pl-4 sm:pl-5'>
+      <div className='glass glass-bar mx-auto flex h-14 max-w-[1520px] items-center justify-between gap-4 rounded-[20px] pr-2 pl-4 sm:pl-5'>
         <Link
           to='/'
-          className='flex min-w-0 items-baseline gap-3 rounded-md py-1'
+          className='flex h-11 min-w-0 items-center rounded-md'
         >
-          <span className='text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap'>
-            {portfolio.name}
-          </span>
-          <span className='label hidden text-muted md:inline'>
-            {portfolio.role}
+          <span className='flex items-baseline gap-3'>
+            <span className='text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap'>
+              {portfolio.name}
+            </span>
+            <span className='label hidden text-muted md:inline'>
+              {portfolio.role}
+            </span>
           </span>
         </Link>
         <nav aria-label='Main'>
@@ -36,7 +38,7 @@ export function Header() {
                     to={item.to}
                     aria-current={current ? 'page' : undefined}
                     className={cn(
-                      'relative flex h-10 items-center gap-2 rounded-[12px] px-2.5 text-[15px] tracking-[-0.01em] transition-colors sm:px-3.5',
+                      'relative flex h-11 items-center gap-2 rounded-[12px] px-2.5 text-[15px] tracking-[-0.01em] transition-colors sm:px-3.5',
                       current
                         ? 'text-ink'
                         : 'text-muted hover:bg-white/60 hover:text-ink'

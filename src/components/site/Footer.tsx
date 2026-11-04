@@ -20,7 +20,7 @@ export function Footer() {
             </p>
             <Link
               to='/contact'
-              className='group mt-4 inline-flex items-center gap-3 rounded-md text-[clamp(28px,3.4vw,44px)] leading-none font-medium tracking-[-0.035em]'
+              className='group mt-4 inline-flex min-h-11 items-center gap-3 rounded-md text-[clamp(28px,3.4vw,44px)] leading-none font-medium tracking-[-0.035em]'
             >
               <span className='link-line pb-1'>Start a project</span>
               <Arrow
@@ -41,7 +41,7 @@ export function Footer() {
             </div>
             <div>
               <dt className='label text-muted'>Elsewhere</dt>
-              <dd className='mt-2'>
+              <dd className='mt-[-2px] -mb-2.5'>
                 <ul className='text-[15px] leading-6'>
                   {portfolio.social.map((link) => (
                     <li key={link.label}>
@@ -49,7 +49,7 @@ export function Footer() {
                         href={link.href}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='rounded-sm hover:text-muted'
+                        className='flex h-11 items-center rounded-sm hover:text-muted'
                       >
                         {link.label}
                         <span className='sr-only'> (opens in a new tab)</span>
@@ -60,7 +60,7 @@ export function Footer() {
                     <li>
                       <a
                         href={`mailto:${portfolio.ownerEmail}`}
-                        className='rounded-sm hover:text-muted'
+                        className='flex h-11 items-center rounded-sm hover:text-muted'
                       >
                         {portfolio.ownerEmail}
                       </a>
@@ -85,11 +85,30 @@ export function Footer() {
         <DissolvingWord word={portfolio.footerWord} className='w-full' />
       </div>
 
-      <div className='mx-auto flex max-w-[1520px] items-center justify-between gap-4 px-4 pt-5 pb-6 sm:px-6'>
-        <p className='label text-muted'>
+      <div className='mx-auto grid max-w-[1520px] grid-cols-2 items-center gap-x-4 gap-y-2 px-4 pt-4 pb-5 sm:grid-cols-3 sm:px-6'>
+        <a
+          href='https://layerwise.app'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='col-span-2 inline-flex h-11 items-center justify-self-start rounded-md sm:order-2 sm:col-span-1 sm:justify-self-center'
+        >
+          <img
+            src='https://layerwise.app/powered-by.png'
+            width={174}
+            height={28}
+            loading='lazy'
+            alt='Powered by Layerwise'
+            className='block h-7 w-[174px]'
+          />
+          <span className='sr-only'> (opens in a new tab)</span>
+        </a>
+        <p className='label text-muted sm:order-1'>
           © {year} {portfolio.name}
         </p>
-        <a href='#top' className='label flex items-center gap-1.5 rounded-sm text-muted hover:text-ink'>
+        <a
+          href='#top'
+          className='label flex h-11 items-center gap-1.5 justify-self-end rounded-sm text-muted hover:text-ink sm:order-3'
+        >
           Back to top
           <Arrow size={12} direction='n' />
         </a>

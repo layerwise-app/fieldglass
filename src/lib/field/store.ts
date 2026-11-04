@@ -18,7 +18,31 @@ export type FieldScene = {
    */
   x: number;
   y: number;
+  /**
+   * 0: the field as it is (home). 1: a faint, sharp dot texture for pages
+   * with text over it. It replaces the blur, so the field never reads as a
+   * smudge behind copy, and keeps body text at 4.5:1 or better.
+   */
+  veil: number;
+  /**
+   * The form's size: 1 is the default (radius ~0.38 of the viewport's
+   * shorter side). Case studies set it to fit the form in their hero.
+   */
+  scale: number;
 };
+
+/** The form's radius in CSS px at `scale: 1`, for a field of this size. */
+export function formRadius(width: number, height: number) {
+  return 0.38 * Math.min(width, height);
+}
+
+/**
+ * How far a form reaches on screen from its centre, as a multiple of its
+ * radius, whatever its rotation: shapes are normalised to a sphere of ~1.1
+ * (ignoring faint dust), and perspective enlarges the nearest points by up to
+ * 4%. Fitting this circle in a box keeps the form inside.
+ */
+export const FORM_REACH = 1.15;
 
 export type FieldMode =
   /** Not started yet (SSR, or before the first frame). */
@@ -34,7 +58,7 @@ export type FieldInfo = { mode: FieldMode; count: number };
 
 type Listener = () => void;
 
-let scene: FieldScene = { shape: 'iris', depth: 0, x: 0, y: 0 };
+let scene: FieldScene = { shape: 'iris', depth: 0, x: 0, y: 0, veil: 0, scale: 1 };
 let info: FieldInfo = { mode: 'pending', count: 0 };
 let morphHandler: ((shape: ShapeName) => Promise<void>) | null = null;
 const listeners = new Set<Listener>();
@@ -59,11 +83,12 @@ export const field = {
     };
   },
   /**
-   * Brings `shape` forward and sharp, centred, and resolves once it has
-   * visibly formed. Resolves right away without live particles.
+   * Brings `shape` forward and sharp, and resolves once it has visibly
+   * formed. Resolves right away without live particles. Callers don't need
+   * to wait: the next page can take over the scene while the morph runs.
    */
   morph(shape: ShapeName): Promise<void> {
-    scene = { ...scene, shape, depth: 0, x: 0, y: 0 };
+    scene = { ...scene, shape, depth: 0, veil: 0 };
     return morphHandler ? morphHandler(shape) : Promise.resolve();
   },
   /** The engine registers how it waits for a morph. */

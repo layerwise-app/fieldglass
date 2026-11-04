@@ -29,9 +29,12 @@ export function Portrait({ className }: { className?: string }) {
         className='size-full object-cover object-[50%_35%]'
         style={{ aspectRatio: `${width} / ${height}` }}
       />
-      <figcaption className='label absolute inset-x-0 top-0 flex justify-between gap-3 p-4 text-muted'>
-        <span>{portfolio.name.split(' ')[0]}, 2026</span>
-        <span>24,134 dots</span>
+      {/* Each label sits on a chip of paper so the dots never run under it. */}
+      <figcaption className='label absolute inset-x-0 top-0 flex justify-between gap-3 p-2.5 text-muted'>
+        <span className='rounded-md bg-[#EEEDE8] px-1.5 py-0.5'>
+          {portfolio.name.split(' ')[0]}, 2026
+        </span>
+        <span className='rounded-md bg-[#EEEDE8] px-1.5 py-0.5'>24,134 dots</span>
       </figcaption>
     </figure>
   );

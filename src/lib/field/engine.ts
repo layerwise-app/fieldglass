@@ -153,6 +153,14 @@ export type EngineOptions = {
 
 const FOV = (34 * Math.PI) / 180;
 const CAM = 4;
+/**
+ * A full veil (see `FieldScene.veil`) fades the field by VEIL_FADE, draws
+ * fewer, crisper dots and never lets it cover more than VEIL_CAP of the
+ * paper. 13% graphite on paper still leaves the muted text colour at 4.7:1.
+ */
+const VEIL_FADE = 0.5;
+const VEIL_KEEP = 0.45;
+const VEIL_CAP = 0.13;
 
 export class FieldEngine {
   private gl: WebGL2RenderingContext;
@@ -190,6 +198,8 @@ export class FieldEngine {
   private depth = new Smooth(0, 5.5);
   private offX = new Smooth(0, 5);
   private offY = new Smooth(0, 5);
+  private veil = new Smooth(0, 4.5);
+  private zoom = new Smooth(1, 5);
   private pointer = { x: 0, y: 0, vx: 0, vy: 0, px: 0, py: 0, t: 0, active: false };
   private parallax = { x: new Smooth(0, 2.2), y: new Smooth(0, 2.2) };
   private needsDraw = true;
@@ -436,7 +446,13 @@ export class FieldEngine {
     this.startTime = performance.now();
     this.lastTime = this.startTime;
     if (this.options.reducedMotion) this.snap = true;
-    this.requestShape(field.getScene().shape);
+    // Start where the page wants the form, so it gathers in place.
+    const scene = field.getScene();
+    this.offX.set(scene.x);
+    this.offY.set(scene.y);
+    this.veil.set(scene.veil);
+    this.zoom.set(scene.scale);
+    this.requestShape(scene.shape);
     this.warmShapes();
     field.onMorph((shape) => this.morph(shape));
     this.options.onMode(this.options.reducedMotion ? 'static' : 'live', this.particleCount);
@@ -518,13 +534,16 @@ export class FieldEngine {
       this.requestShape(shape);
       return Promise.resolve();
     }
-    // Come forward faster than scrolling does, so the shape is sharp in time.
+    // Come forward faster than scrolling does, so the shape is sharp in time,
+    // and move into the next page's place before its title fades in.
     this.depth.omega = 14;
+    for (const s of [this.offX, this.offY, this.zoom]) s.omega = 13;
     return new Promise((resolve) => {
       this.morphWaiters.push({
         at: performance.now() + 960,
         resolve: () => {
           this.depth.omega = 5.5;
+          for (const s of [this.offX, this.offY, this.zoom]) s.omega = 5;
           resolve();
         }
       });
@@ -608,12 +627,14 @@ export class FieldEngine {
     }
 
     if (this.options.reducedMotion) {
-      const key = `${scene.shape}|${scene.depth.toFixed(3)}|${scene.x}|${scene.y}|${this.width}x${this.height}`;
+      const key = `${scene.shape}|${scene.depth.toFixed(3)}|${scene.x}|${scene.y}|${scene.veil}|${scene.scale}|${this.width}x${this.height}`;
       if (key === this.lastScene && !this.needsDraw && !this.snap) return;
       this.lastScene = key;
       this.depth.set(scene.depth);
       this.offX.set(scene.x);
       this.offY.set(scene.y);
+      this.veil.set(scene.veil);
+      this.zoom.set(scene.scale);
       if (this.currentShape) {
         this.step(0, true);
         this.snap = false;
@@ -627,6 +648,8 @@ export class FieldEngine {
     this.depth.step(scene.depth, dt);
     this.offX.step(scene.x, dt);
     this.offY.step(scene.y, dt);
+    this.veil.step(scene.veil, dt);
+    this.zoom.step(scene.scale, dt);
     const p = this.pointer;
     // Velocity decays when the pointer rests.
     if (now - p.t > 60) {
@@ -652,7 +675,7 @@ export class FieldEngine {
     const halfH = Math.tan(FOV / 2) * CAM;
     // The form's radius is ~0.38 of the smaller viewport side.
     const minSide = Math.min(1, aspect);
-    const fit = 0.76 * minSide * halfH;
+    const fit = 0.76 * minSide * halfH * this.zoom.v;
     const idle = this.options.reducedMotion ? 0 : 1;
     const ry = idle * (Math.sin(time * 0.11) * 0.22 + this.parallax.x.v * 0.16);
     const rx = idle * (Math.sin(time * 0.07 + 1.3) * 0.06 - this.parallax.y.v * 0.1);
@@ -725,7 +748,9 @@ export class FieldEngine {
     const cur = this.targets[this.read]!;
     const cam = this.camera(time);
     const d = this.depth.v;
-    const blur = smoothstep(0.02, 1, d);
+    // Veiled, the field stays sharp and turns faint instead of blurring.
+    const veil = Math.min(1, Math.max(0, this.veil.v));
+    const blur = smoothstep(0.02, 1, d) * (1 - veil);
     // Depth of field: a Gaussian blur over a low-resolution copy of the
     // points. The layer shrinks as the blur grows so the kernel never skips
     // pixels, and the cost stays flat whatever the particle count.
@@ -734,7 +759,7 @@ export class FieldEngine {
     const lw = Math.max(1, Math.round(this.width * scale));
     const lh = Math.max(1, Math.round(this.height * scale));
     // Keep fewer particles when blurred: they overlap anyway.
-    const keep = this.keep * (1 - 0.4 * blur);
+    const keep = this.keep * (1 - 0.4 * blur) * (1 - (1 - VEIL_KEEP) * veil);
     const [a, b] = this.layers;
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, b.fbo);
@@ -764,6 +789,7 @@ export class FieldEngine {
     gl.uniform1f(this.u(p, 'uSize'), small ? 1.15 : 1.35);
     gl.uniform1f(this.u(p, 'uGrow'), 1 + 0.6 * blur + 0.9 * burst);
     gl.uniform1f(this.u(p, 'uBlur'), blur);
+    gl.uniform1f(this.u(p, 'uVeil'), veil);
     gl.uniform1f(this.u(p, 'uSpread'), 1.45 * smoothstep(0.15, 1, d));
     gl.uniform1f(this.u(p, 'uTime'), time);
     gl.uniform1f(this.u(p, 'uScale'), this.dpr * scale);
@@ -810,7 +836,8 @@ export class FieldEngine {
     gl.bindTexture(gl.TEXTURE_2D, a.tex);
     gl.uniform1i(this.u(c, 'uTex'), 0);
     gl.uniform2f(this.u(c, 'uUvScale'), uv[0], uv[1]);
-    gl.uniform1f(this.u(c, 'uOpacity'), 1 - 0.1 * blur);
+    gl.uniform1f(this.u(c, 'uOpacity'), (1 - 0.1 * blur) * (1 - VEIL_FADE * veil));
+    gl.uniform1f(this.u(c, 'uCap'), 1 - (1 - VEIL_CAP) * veil);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 

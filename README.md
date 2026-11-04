@@ -1,3 +1,5 @@
+<a href="https://layerwise.app" target="_blank" rel="noopener noreferrer"><img src="https://layerwise.app/powered-by.png" width="174" height="28" alt="Powered by Layerwise"></a>
+
 # Fieldglass
 
 A portfolio for one designer or a small studio, where a live particle field is
@@ -196,7 +198,14 @@ email appears under Email → Local in Layerwise instead of being sent.
   morph and the icon hop are skipped, and videos don't autoplay.
 - Without WebGL2, a rendered still of the same scene is shown
   (`public/field/<shape>.webp`).
-- On phones, scrolling is normal and nothing depends on hover.
+- Behind pages of text (About, Contact, Work, the 404 and a case study once
+  you scroll past its hero) the field becomes a faint, sharp dot texture from
+  the top-right corner. It is capped at 13% of the paper colour, so body text
+  keeps at least 4.5:1 over it.
+- A case study's shape is fitted into the empty box beside its title (above
+  it on phones), so it never runs into the title, summary or details.
+- On phones, scrolling is normal and nothing depends on hover, and every tap
+  target is at least 44 px tall.
 
 ## Commands
 

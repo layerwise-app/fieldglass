@@ -90,14 +90,13 @@ export function FieldCanvas() {
     };
   }, []);
 
-  // The still follows the scene: shape, depth (scale + blur) and offset.
+  // The still follows the scene: shape, depth (scale + blur), offset, size
+  // and veil.
   useEffect(() => {
     if (!still) return;
     let raf = 0;
     let shape = still;
-    let depth = field.getScene().depth;
-    let x = 0;
-    let y = 0;
+    let { depth, x, y, veil, scale } = field.getScene();
     let last = '';
     const tick = () => {
       raf = requestAnimationFrame(tick);
@@ -105,20 +104,30 @@ export function FieldCanvas() {
       depth += (scene.depth - depth) * 0.12;
       x += (scene.x - x) * 0.12;
       y += (scene.y - y) * 0.12;
+      veil += (scene.veil - veil) * 0.12;
+      scale += (scene.scale - scale) * 0.12;
       if (scene.shape !== shape) {
         shape = scene.shape;
         setStill(shape);
       }
       const img = stillRef.current;
       if (!img) return;
-      const key = `${depth.toFixed(3)}|${x.toFixed(3)}|${y.toFixed(3)}`;
+      const key = [depth, x, y, veil, scale].map((v) => v.toFixed(3)).join('|');
       if (key === last) return;
       last = key;
-      // Matches the live field: pulled back, then diffused into a cloud.
-      const scale = 1 + 0.12 * depth;
-      img.style.transform = `translate(-50%, -50%) translate(${x * 100}vw, ${-y * 100}lvh) scale(${scale})`;
-      img.style.filter = depth > 0.02 ? `blur(${(depth * 26).toFixed(1)}px)` : 'none';
-      img.style.opacity = String(1 - 0.2 * depth);
+      // Matches the live field: pulled back and diffused into a cloud, or
+      // veiled into a faint, sharp texture behind text.
+      const size = (1 + 0.12 * depth) * scale;
+      const blur = depth * 26 * (1 - veil);
+      img.style.transform = `translate(-50%, -50%) translate(${x * 100}vw, ${-y * 100}lvh) scale(${size})`;
+      const filters = [
+        blur > 0.5 ? `blur(${blur.toFixed(1)}px)` : '',
+        veil > 0.01 ? `grayscale(${veil.toFixed(2)})` : ''
+      ].join(' ');
+      img.style.filter = filters.trim() || 'none';
+      // Veiled, even the still's darkest pixel stays within the live field's
+      // cap (13% of the paper), so text over it keeps its contrast.
+      img.style.opacity = String((1 - 0.2 * depth) * (1 - 0.85 * veil));
     };
     tick();
     return () => cancelAnimationFrame(raf);
@@ -127,6 +136,7 @@ export function FieldCanvas() {
   return (
     <div
       aria-hidden
+      data-field
       className='pointer-events-none fixed inset-x-0 top-0 z-0 h-lvh overflow-hidden'
     >
       <canvas

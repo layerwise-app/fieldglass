@@ -110,7 +110,7 @@ export function DemoBlockView({
             }}
           />
           {Demo && !failed && (
-            <div className='absolute inset-0'>
+            <div data-demo className='absolute inset-0'>
               <DemoBoundary onError={() => setFailed(true)}>
                 <Demo />
               </DemoBoundary>

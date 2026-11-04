@@ -127,6 +127,7 @@ uniform mat4 uModel;
 uniform vec2 uOffset;
 uniform float uSize;
 uniform float uBlur;
+uniform float uVeil;
 uniform float uSpread;
 uniform float uTime;
 uniform float uGrow;
@@ -172,7 +173,7 @@ void main() {
   a *= mix(1.0, 1.15, P.w);
   // The accent belongs to the sharp form. Pulled back into the background,
   // the initials settle into graphite with only a trace of warmth.
-  float accent = P.w * (1.0 - 0.88 * smoothstep(0.15, 0.85, uBlur));
+  float accent = P.w * (1.0 - 0.88 * smoothstep(0.15, 0.85, max(uBlur, uVeil)));
   vColor = vec4(mix(uInk, uAccent, accent), clamp(a, 0.0, 1.0));
   vSoft = uBlur;
 }
@@ -201,10 +202,15 @@ precision mediump float;
 uniform sampler2D uTex;
 uniform vec2 uUvScale;
 uniform float uOpacity;
+uniform float uCap;
 in vec2 vUv;
 out vec4 outColor;
 void main() {
-  outColor = texture(uTex, vUv * uUvScale) * uOpacity;
+  vec4 c = texture(uTex, vUv * uUvScale) * uOpacity;
+  // Never darker than uCap: veiled behind text, dense spots flatten into a
+  // light tone instead of a stain. Premultiplied, so scale it all.
+  if (c.a > uCap) c *= uCap / c.a;
+  outColor = c;
 }
 `;
 

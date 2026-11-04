@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 import { Arrow } from '~/components/site/Arrow';
-import { useFieldScene } from '~/components/site/live';
+import { useBackgroundScene } from '~/components/case-study/useScrollScene';
 
 export function NotFound({ children }: { children?: ReactNode }) {
-  useFieldScene({ shape: 'iris', depth: 1, x: 0, y: 0 });
+  useBackgroundScene('iris');
   return (
     <div className='mx-auto grid min-h-[70svh] max-w-[1520px] place-items-center px-4 py-16 sm:px-6'>
       <div className='glass w-full max-w-[640px] rounded-[30px] p-7 sm:p-10'>

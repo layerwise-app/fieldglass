@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { Arrow } from '~/components/site/Arrow';
-import { isMorphing, useFieldScene } from '~/components/site/live';
+import { useBackgroundScene } from '~/components/case-study/useScrollScene';
+import { isMorphing } from '~/components/site/live';
 import { ProjectLink } from '~/components/site/ProjectLink';
 import { ResponsiveImage } from '~/components/site/ResponsiveImage';
 import { ShapeGlyph } from '~/components/site/ShapeGlyph';
@@ -29,7 +30,7 @@ export const Route = createFileRoute('/work/')({
 
 function WorkPage() {
   const { view = 'grid' } = Route.useSearch();
-  useFieldScene({ shape: 'iris', depth: 1, x: 0, y: 0 });
+  useBackgroundScene('iris');
   const total = projects.length + archive.length;
 
   return (
@@ -68,7 +69,7 @@ function years() {
 
 function ViewToggle({ view }: { view: View }) {
   const item =
-    'flex h-10 items-center gap-2 rounded-[12px] px-4 text-[15px] tracking-[-0.01em] transition-colors';
+    'flex h-11 items-center gap-2 rounded-[12px] px-4 text-[15px] tracking-[-0.01em] transition-colors';
   return (
     <nav aria-label='View' className='glass-quiet flex w-fit gap-1 rounded-[16px] p-1'>
       <Link
@@ -245,7 +246,7 @@ function IndexTable() {
                     <ProjectLink
                       project={row.project}
                       {...preview(row.project)}
-                      className='flex items-center gap-2.5 rounded-md text-[17px] leading-6 font-medium tracking-[-0.015em] sm:text-[19px]'
+                      className='-my-2.5 flex items-center gap-2.5 rounded-md py-2.5 text-[17px] leading-6 font-medium tracking-[-0.015em] sm:text-[19px]'
                     >
                       <ShapeGlyph
                         shape={row.project.shape}

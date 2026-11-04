@@ -116,6 +116,12 @@
       0 30px 60px -30px color-mix(in srgb, var(--fg-ink) 22%, transparent);
   }
 
+  /* The sticky bar: still frosted, but dense enough that muted text keeps
+     4.5:1 whatever scrolls under it, even a black image. */
+  .glass-bar {
+    background: color-mix(in srgb, #ffffff 88%, transparent);
+  }
+
   .glass-quiet {
     background: color-mix(in srgb, #ffffff 40%, transparent);
     -webkit-backdrop-filter: blur(18px) saturate(1.4);
@@ -209,7 +215,7 @@
   transform-origin: 50% 100%;
 }
 
-/* Case studies fade in after the field has morphed into their shape. */
+/* Case studies fade in while the field is still morphing into their shape. */
 @keyframes fg-arrive {
   from {
     opacity: 0;
@@ -222,12 +228,12 @@
 }
 
 .arrive {
-  animation: fg-arrive 700ms var(--ease-out-expo) both;
+  animation: fg-arrive 620ms var(--ease-out-expo) both;
 }
 
 .page-leave {
   opacity: 0;
-  transition: opacity 260ms ease;
+  transition: opacity 160ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -256,6 +262,18 @@
 
 .hop ~ [data-hop-shadow] {
   animation: fg-hop-shadow 620ms var(--ease-out-expo);
+}
+
+/* Phones: every control inside a live demo is at least 44 px tall to tap.
+   Buttons grow; sliders keep their track and get a taller hit area; for
+   choices drawn as labels around a hidden radio, the label is the target. */
+@media (max-width: 639px) {
+  [data-demo] :is(button, select, input:not([type='radio'], [type='checkbox'])) {
+    min-height: 44px;
+  }
+  [data-demo] label:has(input:is([type='radio'], [type='checkbox'])) {
+    min-height: 44px;
+  }
 }
 
 /* Case-study compare slider: the range input is invisible, so its focus ring

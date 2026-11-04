@@ -1,5 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
-import { field, type FieldScene } from '~/lib/field/store';
+import { field } from '~/lib/field/store';
 import { portfolio } from '~/portfolio.config';
 
 /**
@@ -58,14 +58,6 @@ export function ParticleCount({ className }: { className?: string }) {
       {text || ' '}
     </span>
   );
-}
-
-/** Sets the field's scene while a page is mounted. */
-export function useFieldScene(scene: Partial<FieldScene>) {
-  const { shape, depth, x, y } = scene;
-  useEffect(() => {
-    field.setScene({ shape, depth, x, y });
-  }, [shape, depth, x, y]);
 }
 
 /** True while a project link is morphing the field before navigating. */
