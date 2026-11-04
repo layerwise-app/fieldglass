@@ -26,9 +26,14 @@ function figures(project: Project): Figure[] {
   return list;
 }
 
+// The sample work is held to the template's bar: a live demo and at least five
+// images each. Your own projects only need to be valid.
+const SAMPLES = ['veld-kunsthal', 'low-orbit', 'uniforms', 'undertone', 'atlas-room', 'long-take'];
+const samples = projects.filter((p) => SAMPLES.includes(p.slug));
+
 describe('case studies', () => {
-  it('has the six sample projects', () => {
-    expect(projects.length).toBeGreaterThanOrEqual(6);
+  it('has at least one project', () => {
+    expect(projects.length).toBeGreaterThan(0);
   });
 
   it('uses unique slugs and orders', () => {
@@ -49,19 +54,14 @@ describe('case studies', () => {
       }
       expect(project.team.length).toBeGreaterThan(0);
       expect(project.problem.length).toBeGreaterThan(0);
-      expect(project.decisions.length).toBeGreaterThanOrEqual(3);
+      expect(project.decisions.length).toBeGreaterThan(0);
       expect(project.outcome.length).toBeGreaterThan(0);
-      expect(project.cover.image.og, 'cover needs a link-preview JPG').toBeTruthy();
-      expect(project.blocks.some((b) => b.type === 'demo')).toBe(true);
 
-      const all = figures(project);
-      for (const figure of all) {
+      for (const figure of figures(project)) {
         expect(figure.alt.trim().length, 'alt text').toBeGreaterThan(0);
         expect(figure.image.width).toBeGreaterThan(0);
         expect(figure.image.placeholder).toMatch(/^data:image\//);
       }
-      const distinct = new Set(all.map((f) => f.image.src));
-      expect(distinct.size, 'at least five distinct images').toBeGreaterThanOrEqual(5);
 
       for (const block of project.blocks) {
         if (block.type === 'compare') {
@@ -75,6 +75,17 @@ describe('case studies', () => {
     }
   );
 
+  it.each(samples.map((p) => [p.slug, p] as const))(
+    'sample %s has a demo, a share image and five or more images',
+    (_slug, project) => {
+      expect(project.cover.image.og, 'cover needs a link-preview JPG').toBeTruthy();
+      expect(project.decisions.length).toBeGreaterThanOrEqual(3);
+      expect(project.blocks.some((b) => b.type === 'demo')).toBe(true);
+      const distinct = new Set(figures(project).map((f) => f.image.src));
+      expect(distinct.size).toBeGreaterThanOrEqual(5);
+    }
+  );
+
   it('finds projects and wraps to the next one', () => {
     const first = projects[0]!;
     const last = projects[projects.length - 1]!;
@@ -83,8 +94,8 @@ describe('case studies', () => {
     expect(getNextProject(last.slug)).toBe(first);
   });
 
-  it('covers every block type across the sample work', () => {
-    const used = new Set(projects.flatMap((p) => p.blocks.map((b) => b.type)));
+  it.skipIf(samples.length < SAMPLES.length)('covers every block type across the sample work', () => {
+    const used = new Set(samples.flatMap((p) => p.blocks.map((b) => b.type)));
     for (const type of ['demo', 'image', 'pair', 'video', 'text', 'quote', 'compare', 'metrics']) {
       expect(used, type).toContain(type);
     }

@@ -17,7 +17,8 @@
     "lint": "oxlint",
     "test": "vitest run",
     "add-images": "node scripts/add-images.mjs",
-    "render-screens": "node scripts/render-screens.mjs"
+    "render-screens": "node scripts/render-screens.mjs",
+    "icons": "node scripts/make-icons.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
