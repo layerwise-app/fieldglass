@@ -1,0 +1,82 @@
+{
+  "demo": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoQAAoAA4BaJaQAAu19zgpKgAD++E8KeWF1B74bqxzkOMnBqAAAAA=="
+  },
+  "cover": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADwAQCdASoQAAoAA4BaJZQAAudk5Su9uQAA/vhVAGezQb7xBOdIiDEarAAAAA==",
+    "og": true
+  },
+  "operator": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRi4AAABXRUJQVlA4ICIAAAAwAQCdASoQAAoAA4BaJaQAA3AA/vMucafMSH0i3NbkQAAA"
+  },
+  "venue-setup": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAACQAgCdASoQAAoAA4BaJbACdEcAZIAC3WvsO+8xwADifWkek4gpW/lmNGw/FW/BqrlxYFR9z+L4iB3gnZwZ09NXImkzQ0G9NCB+M8lbfp9S818Qe8zpOhsWt0PktY9LwSOYCkOdQAA="
+  },
+  "scenes": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAAAQAgCdASoQAAoAA4BaJZQCdAYr7vmJ/yAAAPkUCXSxnnoEofiOX+OFdC3b/m2+G3hlrIk1wZSJS725wenafHb7phve7iUq5EAAAA=="
+  },
+  "fan-web": {
+    "width": 2880,
+    "height": 3600,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAADQBACdASoQABQAPu1iqU2ppaOiMAgBMB2JbACdL17sASwABe+w2icz2j8As/MUKAD+fkArs5zqAzW7k9DzsJ6rezghHdUdRz3jm/tiSC3Vp8ZJWR/Gu+3sznS1IL68gm7KqMmmcDOky9euYj6WO8eYLA7hNKwsB8TMLuwLx1xno+P4AG6zUVSg79iHYM/kGLbm7e/j2Dv5aFzVF8YEAA=="
+  },
+  "poster": {
+    "width": 2880,
+    "height": 3600,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAACQAwCdASoQABQAPu1iqU2ppaOiMAgBMB2JZwAAXiGvpNDXuSHAAP7c/hUXp/GaF+kHcOZvpa3Oez+3WlDVqxTVKIFZHWiSIxB+9ohD302MB6c5+0xwCMXnUUk2S8KokVo+DcaAAAA="
+  },
+  "clip-poster": {
+    "width": 1600,
+    "height": 1000,
+    "widths": [
+      800,
+      1600
+    ],
+    "placeholder": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACQAQCdASoQAAoAA4BaJZQAAp0+nIAA/vkYctaIF2D1TyiMxl0D/nQAAAA="
+  }
+}

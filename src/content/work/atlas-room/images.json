@@ -1,0 +1,93 @@
+{
+  "cover": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoQAAoAA4BaJZgCdAEOIgVvAAD+9N4/KkNWXj3BLm2kwpAAuRP5pKaOmJWA9ToXCObpSQTXAAA=",
+    "og": true
+  },
+  "dollhouse": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADwAQCdASoQAAoAA4BaJZQCdAD0ggC3YAAA/u2OPYhL5Yq7F2QGCFGbj8Z828rNAJ08WSMCyhZknjJElGhgAA=="
+  },
+  "onboarding": {
+    "width": 2880,
+    "height": 3600,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAQBACdASoQABQAPu1iqk2ppaQiMAgBMB2JZQC7ACHf4/OxR9BDQ+KvgAD+7TXFJbL4t97Erlc1oZpwIv42rK5MOeM3JBlq+JLqTBNVYEAtF8EC2oHegAAA"
+  },
+  "annotate": {
+    "width": 2880,
+    "height": 3600,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADQAwCdASoQABQAPu1mq04ppaQiMAgBMB2JQBdgBDuHxFyETof/QQAA/u06RH7wJ2QzC3r954mdVze4SXCjd9q5HyFv/TrkmOxXKBqjlLHh3LRuuj8+fygAAAA="
+  },
+  "sundial": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADwAQCdASoQAAoAA4BaJZQC7AEPhq3oMNAA/vYS2jIu4o1+X3vphZ3rZKhASGA4mm4pwwla9F/N4ovAAAA="
+  },
+  "review-summary": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADQAQCdASoQAAoAA4BaJZwAApKAlHduEAD+8+g+q1S3YH2njiZmpa82q1pHq+TY2Ee8XAAA"
+  },
+  "flythrough": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAAAwAgCdASoQAAoAA4BaJYwCdIExFcdmLleSgAD+8hTMZemEnEdFzafqG18F1mim0ozk+9bgvYyoIMAA"
+  },
+  "walkthrough": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADwAQCdASoQAAoAA4BaJZgCdAEQE7MWBwAA/vTTsR5mua1JjNQp1AT2k1qSkx4YzS/REw23YAA="
+  },
+  "demo": {
+    "width": 2880,
+    "height": 1800,
+    "widths": [
+      800,
+      1600,
+      2880
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoQAAoAA4BaJYgC7AERFCfoAAD+86qP10ETpbHuSd90FYtei4sAdlZASpk0ADhKLrZLAAAA"
+  }
+}

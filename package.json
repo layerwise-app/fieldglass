@@ -12,9 +12,12 @@
     "start": "node .output/server/index.mjs",
     "release": "wrangler deploy",
     "cf-typegen": "wrangler types",
-    "auth:generate": "pnpm dlx auth@latest generate",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "node scripts/migrate-local.mjs"
+    "db:migrate": "node scripts/migrate-local.mjs",
+    "lint": "oxlint",
+    "test": "vitest run",
+    "add-images": "node scripts/add-images.mjs",
+    "render-screens": "node scripts/render-screens.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

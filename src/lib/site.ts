@@ -23,16 +23,21 @@ type Site = {
 
 /** What search engines and link previews read about this site. */
 export const site: Site = {
-  name: 'My App',
-  description: 'Built with Layerwise',
+  name: 'Noor Haddad — Designer & creative coder',
+  description:
+    'Noor Haddad is an independent designer and creative coder in Amsterdam, making generative identities, data sonification tools and real-time interfaces.',
   url: '',
-  image: '',
-  imageAlt: '',
+  image: '/og-image.png',
+  imageAlt:
+    'A burst of graphite particles gathered into a radial form around the orange initials NH',
   googleSiteVerification: ''
 };
 
-/** Public pages in `/sitemap.xml`. Add every page search engines should find. */
-export const sitemapPaths: string[] = ['/'];
+/**
+ * Public pages in `/sitemap.xml`. Every case study in `src/content/work/` is
+ * added automatically by the sitemap route.
+ */
+export const sitemapPaths: string[] = ['/', '/work', '/about', '/contact'];
 
 const requestOrigin = createIsomorphicFn()
   .server(() => getRequestUrl().origin)

@@ -12,7 +12,10 @@ export type FieldScene = {
    * 1: pulled back and blurred into the background behind glass.
    */
   depth: number;
-  /** Where the form's centre sits, as a fraction of the viewport from its centre (-0.5 to 0.5). */
+  /**
+   * Where the form's centre sits, as a fraction of the viewport from its
+   * centre (-0.5 to 0.5). Positive `x` moves it right, positive `y` moves it up.
+   */
   x: number;
   y: number;
 };

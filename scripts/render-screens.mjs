@@ -71,6 +71,13 @@ async function main(argv) {
       await page.waitForFunction(() => window.__screenReady === true, null, {
         timeout: 30000
       });
+      // Never bake a dev-server error overlay into a capture.
+      const overlay = await page.locator('vite-error-overlay').count();
+      if (overlay > 0) {
+        throw new Error(
+          `${screen.name}: the dev server is showing an error overlay. Fix it and run again.`
+        );
+      }
       const file = path.join(out, `${screen.name}.png`);
       await page.locator('#screen').screenshot({ path: file });
       files.push(file);

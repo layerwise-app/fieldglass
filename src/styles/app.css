@@ -240,3 +240,32 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* The tool icon's shadow shrinks while it is in the air. */
+@keyframes fg-hop-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  45% {
+    transform: scaleX(0.5);
+    opacity: 0.45;
+  }
+}
+
+.hop ~ [data-hop-shadow] {
+  animation: fg-hop-shadow 620ms var(--ease-out-expo);
+}
+
+/* Case-study compare slider: the range input is invisible, so its focus ring
+   is drawn on the handle instead. */
+figure:has(.compare-range:focus-visible) .compare-handle {
+  outline: 2px solid var(--fg-accent);
+  outline-offset: 3px;
+}
+
+/* About: open writing notes slide their text in. */
+.note[open] > div {
+  animation: fg-arrive 500ms var(--ease-out-expo) both;
+}

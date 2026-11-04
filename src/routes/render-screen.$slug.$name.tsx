@@ -5,9 +5,10 @@ import { seo } from '~/utils/seo';
 
 // Development only: `pnpm render-screens <slug>` opens this page to capture
 // each sample screen as an image. It is a 404 in the published site.
-const modules = import.meta.glob<{ screens: ScreenSet }>(
-  '../content/work/*/screens.tsx'
-);
+const modules: Record<string, () => Promise<{ screens: ScreenSet }>> = import
+  .meta.env.DEV
+  ? import.meta.glob<{ screens: ScreenSet }>('../content/work/*/screens.tsx')
+  : {};
 
 declare global {
   interface Window {
@@ -56,6 +57,8 @@ function RenderScreen() {
     return () => {
       cancelled = true;
     };
+    // Each screen name is a fresh capture, so it restarts the ready signal.
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [screens, name]);
 
   if (error) return <pre id='screen-error'>{error}</pre>;
