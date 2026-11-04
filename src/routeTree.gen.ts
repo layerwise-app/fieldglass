@@ -10,13 +10,27 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as WorkIndexRouteImport } from './routes/work.index'
+import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as RenderScreenSlugNameRouteImport } from './routes/render-screen.$slug.$name'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
@@ -29,6 +43,16 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkIndexRoute = WorkIndexRouteImport.update({
+  id: '/work/',
+  path: '/work/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkSlugRoute = WorkSlugRouteImport.update({
+  id: '/work/$slug',
+  path: '/work/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RenderScreenSlugNameRoute = RenderScreenSlugNameRouteImport.update({
   id: '/render-screen/$slug/$name',
   path: '/render-screen/$slug/$name',
@@ -37,40 +61,76 @@ const RenderScreenSlugNameRoute = RenderScreenSlugNameRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work/': typeof WorkIndexRoute
   '/render-screen/$slug/$name': typeof RenderScreenSlugNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work': typeof WorkIndexRoute
   '/render-screen/$slug/$name': typeof RenderScreenSlugNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/work/$slug': typeof WorkSlugRoute
+  '/work/': typeof WorkIndexRoute
   '/render-screen/$slug/$name': typeof RenderScreenSlugNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/robots.txt' | '/sitemap.xml' | '/render-screen/$slug/$name'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/work/$slug'
+    | '/work/'
+    | '/render-screen/$slug/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/robots.txt' | '/sitemap.xml' | '/render-screen/$slug/$name'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/work/$slug'
+    | '/work'
+    | '/render-screen/$slug/$name'
   id:
     | '__root__'
     | '/'
+    | '/about'
+    | '/contact'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/work/$slug'
+    | '/work/'
     | '/render-screen/$slug/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  WorkSlugRoute: typeof WorkSlugRoute
+  WorkIndexRoute: typeof WorkIndexRoute
   RenderScreenSlugNameRoute: typeof RenderScreenSlugNameRoute
 }
 
@@ -81,6 +141,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/robots.txt': {
@@ -97,6 +171,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/work/': {
+      id: '/work/'
+      path: '/work'
+      fullPath: '/work/'
+      preLoaderRoute: typeof WorkIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work/$slug': {
+      id: '/work/$slug'
+      path: '/work/$slug'
+      fullPath: '/work/$slug'
+      preLoaderRoute: typeof WorkSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/render-screen/$slug/$name': {
       id: '/render-screen/$slug/$name'
       path: '/render-screen/$slug/$name'
@@ -109,8 +197,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  WorkSlugRoute: WorkSlugRoute,
+  WorkIndexRoute: WorkIndexRoute,
   RenderScreenSlugNameRoute: RenderScreenSlugNameRoute,
 }
 export const routeTree = rootRouteImport
